@@ -30,7 +30,5 @@ module.exports = {
       tableName: 'knex_migrations'
     },
     useNullAsDefault: true
-  },
-  debug: Config.IS_DEV
-
+  }
 };

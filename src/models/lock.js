@@ -2,6 +2,8 @@
 
 const DB = require('./db')
 const Joi = require('joi')
+const uuidv4 = require('uuid/v4');
+const User = require('./user')
 
 const schema = Joi.object().keys({
   name: Joi.string(),
@@ -10,13 +12,19 @@ const schema = Joi.object().keys({
 });
 
 var Lock = DB.Model.extend({
-  tableName: 'locks'
+  tableName: 'locks',
+  patch: function(params={}){
+    return this.save({name: params.name}, {patch: true})
+  },
+  user: function() {
+    return this.belongsTo(User,"userId");
+  },
 },
 {
-  create: function(name, userId) {
-    return new Lock({ name: name, userId:userId}).save();
+  create: function(params={}) {
+    return Lock.forge({ name: params.name, macId: uuidv4(), userId:params.userId}).save();
   },
 
 });
 
-module.exports = Lock
+module.exports = Lock 

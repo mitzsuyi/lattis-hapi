@@ -38,7 +38,7 @@
   },
   "scripts": {
     "start": "node server/index.js",
-    "test": "lab --assert code --coverage --leaks --coverage-exclude config "
+    "test": "lab --assert code --coverage --leaks --coverage-exclude config --coverage-exclude db "
   },
   "devDependencies": {
     "code": "^5.2.0",

@@ -28,7 +28,7 @@ describe('User model', function() {
   })
   it("can be destroyed", async()=>{
     const user = await User.create({username:"username", password:"password"})
-    user.destroy()
+    await user.destroy()
     user.on('destroyed', async ()=>{
       const saved = await User.where({id: user.id})
       expect(saved).to.not.exist()
