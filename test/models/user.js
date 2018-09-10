@@ -24,13 +24,15 @@ describe('User model', function() {
     count = await User.count()
     expect(count).to.equal(1)
     const saved = await User.where({id: user.id})
-    expect(saved).to.exist(1)
+    expect(saved).to.exist()
   })
   it("can be destroyed", async()=>{
     const user = await User.create({username:"username", password:"password"})
-    await user.destroy
-    const saved = User.where({id: user.id})
-    expect(saved).to.not.exist()
+    user.destroy()
+    user.on('destroyed', async ()=>{
+      const saved = await User.where({id: user.id})
+      expect(saved).to.not.exist()
+    })
   }) 
   it("contains locks", async ()=>{
     const user = await User.create({username:"username", password:"password"})

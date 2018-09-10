@@ -2,6 +2,7 @@
 
 const DB = require('./db')
 const Joi = require('joi')
+const Lock = require('./lock')
 
 const schema = Joi.object().keys({
   username: Joi.string().required(),
@@ -11,7 +12,10 @@ const schema = Joi.object().keys({
 });
 
 var User = DB.Model.extend({
-  tableName: 'users'
+  tableName: 'users',
+  locks: function() {
+    return this.hasMany(Lock);
+  }
 },
 {
   create: function({username, password}) {

@@ -11,6 +11,12 @@ const schema = Joi.object().keys({
 
 var Lock = DB.Model.extend({
   tableName: 'locks'
+},
+{
+  create: function(name, userId) {
+    return new Lock({ name: name, userId:userId}).save();
+  },
+
 });
 
 module.exports = Lock
