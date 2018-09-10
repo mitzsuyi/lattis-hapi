@@ -1,0 +1,44 @@
+{
+  "name": "lattis-hapi",
+  "version": "0.1.0",
+  "description": "Lattis Mobile Backend API",
+  "main": "server/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mitzsuyi/lattis-hapi.git"
+  },
+  "author": "Mitz Suyi",
+  "private": true,
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "dotenv": "^6.0.0",
+    "hapi": "^17.5.4",
+    "hapi-auth-jwt": "^4.0.0",
+    "hapi-auth-jwt2": "^8.1.0",
+    "hapi-auto-route": "^2.0.3",
+    "hapi-namespace": "^1.0.3",
+    "hapi-swagger": "^9.1.1",
+    "inert": "^5.1.0",
+    "vision": "^5.4.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "git-branch-is master && yarn test",
+      "pre-push": "git-branch-is master && yarn test"
+    }
+  },
+  "engines": {
+    "node": ">=0.10.x"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "lab --assert code --coverage --leaks "
+  },
+  "devDependencies": {
+    "code": "^5.2.0",
+    "git-branch-is": "^2.0.0",
+    "husky": "^0.14.3",
+    "lab": "^16.0.0"
+  }
+}
