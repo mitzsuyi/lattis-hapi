@@ -12,6 +12,7 @@
   "license": "MIT",
   "readmeFilename": "README.md",
   "dependencies": {
+    "bookshelf": "^0.13.3",
     "dotenv": "^6.0.0",
     "hapi": "^17.5.4",
     "hapi-auth-jwt": "^4.0.0",
@@ -20,6 +21,8 @@
     "hapi-namespace": "^1.0.3",
     "hapi-swagger": "^9.1.1",
     "inert": "^5.1.0",
+    "knex": "^0.15.2",
+    "knex-cleaner": "^1.1.4",
     "vision": "^5.4.0"
   },
   "husky": {
@@ -33,12 +36,13 @@
   },
   "scripts": {
     "start": "node server/index.js",
-    "test": "lab --assert code --coverage --leaks "
+    "test": "lab --assert code --coverage --leaks --coverage-exclude config "
   },
   "devDependencies": {
     "code": "^5.2.0",
     "git-branch-is": "^2.0.0",
     "husky": "^0.14.3",
-    "lab": "^16.0.0"
+    "lab": "^16.0.0",
+    "sqlite3": "^4.0.2"
   }
 }

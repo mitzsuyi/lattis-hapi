@@ -1,5 +1,7 @@
-exports.lab = require('lab').script();
-const {describe, it} = require('../setup')
+const { expect } = require('code');
+const Lab = require('lab');
+const {afterEach, describe, it } = exports.lab = Lab.script();
+
 const Lock = require('../../src/models/lock')
 
 describe('Lock model', function() {

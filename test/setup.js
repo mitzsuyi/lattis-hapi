@@ -1,11 +1,21 @@
 'use strict';
 
-const lab = exports.lab = require('lab').script();
-exports.expect = require('code').expect;
+const dbConf = require('../knexfile.js').test
+const bookshelf = require('../src/models/db')
+const knexCleaner = require('knex-cleaner');
 
-exports.describe = lab.describe;
-exports.before = lab.before;
-exports.after = lab.after;
-exports.beforeEach = lab.beforeEach;
-exports.afterEach = lab.afterEach;
-exports.it = lab.it;
+const migrate = async()=>{
+    await bookshelf.knex.migrate.rollback(dbConf)
+    await bookshelf.knex.migrate.latest(dbConf)
+}
+
+const clean = async() =>{
+    await knexCleaner.clean(bookshelf.knex)
+}
+
+module.exports = {
+  db:{
+    migrate: migrate,
+    clean: clean
+  } 
+}
