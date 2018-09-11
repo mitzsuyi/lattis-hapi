@@ -27,14 +27,24 @@ describe('Lock model', function() {
     const saved = await Lock.where({id: lock.id})
     expect(saved).to.exist()
   })
+  it("validates on create", async ()=>{
+    const deferred = Lock.create({})
+    await expect(deferred).to.reject(Error)
+  })  
+  
+  it("validates on patch", async ()=>{
+    const lock = await Lock.create({name:"patch test", userId:1})
+    await expect(lock.patch({name:1})).to.reject(Error)
+  })
 
   it("can be destroyed", async ()=>{
     const lock = await Lock.create({name:"name", userId:1})
+    const lockId = lock.get('id')
+    let saved = await Lock.where({id:lockId}).fetch()
+    expect(saved).to.exist()
     await lock.destroy()
-    lock.on('destroyed', async ()=>{
-        const saved = await Lock.where({id:lock.id})
-        expect(saved).to.not.exist()
-    })
+    saved = await Lock.where({id:lockId}).fetch()
+    expect(saved).to.not.exist()
   })
 
   it("requires userid to create", async ()=>{
@@ -49,14 +59,12 @@ describe('Lock model', function() {
   })
 
   it("name can be patched", async ()=>{
-    const lock = await Lock.create({name:"name", userId:1})
+    const lock = await Lock.create({name:"patch me", userId:1})
     const patchedName="patched name"
     await lock.patch({name: patchedName})
-    lock.on('saved', async ()=>{
-      const saved = await Lock.where({id:lock.id})
-      expect(saved.get('name')).to.equal(patchedName)
-    })
-   })
+    const saved = await Lock.where({id:lock.id}).fetch()
+    expect(saved.get('name')).to.equal(patchedName)
+  })
 
   it("contains reference to a user", async ()=>{
     const user = await User.create({username:"username", password:"password"})

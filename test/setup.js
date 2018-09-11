@@ -9,6 +9,14 @@ const migrate = async()=>{
     await bookshelf.knex.migrate.latest(dbConf)
 }
 
+bookshelf.knex.on('query', (query) => {
+    if(query.bindings && query.bindings.length){
+      if(!query.sql.match(/sqlite|knex/)){
+        //console.log(query.sql)
+      }
+    }
+  }) 
+  
 const clean = async() =>{
     await knexCleaner.clean(bookshelf.knex)
 }
