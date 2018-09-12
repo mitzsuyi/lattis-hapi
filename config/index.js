@@ -3,9 +3,9 @@
 function env(VAR){
   return process.env[VAR]
 }
-const NODE_ENV = env("NODE_ENV")
-const IS_DEV_ENV = NODE_ENV === 'development' || NODE_ENV === undefined
-
+const  DEVELOPMENT = "development"
+const NODE_ENV = env("NODE_ENV") || DEVELOPMENT
+const IS_DEV_ENV = NODE_ENV === DEVELOPMENT
 module.exports={
     PORT: env("PORT"),
     ENV: NODE_ENV,

@@ -46,7 +46,7 @@ describe('API Locks', function() {
         const response = await server.inject(
           request("POST")
         )
-        expect(response.result.statusCode).to.equal(400)
+        expect(response.statusCode).to.equal(400)
     })
     it('should fail if name already exists', async()=>{
       const params = {
@@ -59,11 +59,11 @@ describe('API Locks', function() {
       let response = await server.inject(
           request("POST", params)
       )
-      expect(response.result.statusCode).to.equal(200)
+      expect(response.statusCode).to.equal(200)
       response = await server.inject(
           request("POST", params)
       )
-      expect(response.result.statusCode).to.equal(422)
+      expect(response.statusCode).to.equal(422)
     })
     it('should create a lock ', async()=>{
        let response = await server.inject(
@@ -75,7 +75,7 @@ describe('API Locks', function() {
             }
           })
       )
-      expect(response.result.statusCode).to.equal(200)
+      expect(response.statusCode).to.equal(200)
     })
   })
   describe('DELETE /locks/:id', ()=>{
@@ -85,10 +85,11 @@ describe('API Locks', function() {
       const lock = await Lock.create({name:TEST_LOCK_NAME, userId:CREDENTIALS.id})
       count = await Lock.count()
       expect(count).to.equal(1)
+      const lockId = lock.get('id')
       const response = await server.inject(
-          request("DELETE", {}, CREDENTIALS.id)
+          request("DELETE", {}, lockId)
       )
-      expect(response.result.statusCode).to.equal(200)
+      expect(response.statusCode).to.equal(204)
       count = await Lock.count()
       expect(count).to.equal(0) 
    })  
@@ -99,19 +100,20 @@ describe('API Locks', function() {
       const lock = await Lock.create({name:TEST_LOCK_NAME, userId:userId})
       count = await Lock.count()
       expect(count).to.equal(1) 
+      const lockId = lock.get('id')
       const response = await server.inject(
-          request("DELETE", {}, userId)
+          request("DELETE", {}, lockId)
       )
-      expect(response.result.statusCode).to.equal(403)
+      expect(response.statusCode).to.equal(403)
       count = await Lock.count()
       expect(count).to.equal(1) 
    })
    it('should require authentication', itShouldRequireAuthentication(server,
-        request("DELETE", {}, CREDENTIALS.id)
+        request("DELETE", {credentials: undefined}, 1)
    ))  
   })
   describe('GET /locks', ()=>{
-    it('should retrieve authenticated user locks', async()=>{
+    it('should get authenticated user locks', async()=>{
       let count = await Lock.count()
       expect(count).to.equal(0)  
       const userId = CREDENTIALS.id
@@ -121,13 +123,13 @@ describe('API Locks', function() {
       const response = await server.inject(
           request("GET")
       )
-      expect(response.result.statusCode).to.equal(200)
-      const payload = JSON.parse(response.payload)
+      expect(response.statusCode).to.equal(200)
+      const payload = JSON.parse(response.payload)[0]
       expect(payload.userId).to.equal(userId)
       expect(pick(payload,['id', 'name', 'userId'])).to.equal(lock.pick('id','name','userId'))
     })
     it('should require authentication', itShouldRequireAuthentication(server,
-        request("GET")
+        request("GET", {credentials: undefined})
     ))  
   })
   describe('GET /locks/:id', ()=>{
@@ -142,12 +144,12 @@ describe('API Locks', function() {
       const response = await server.inject(
           request("GET", {}, lockId)
       )
-     expect(response.result.statusCode).to.equal(200)
+     expect(response.statusCode).to.equal(200)
      const payload = JSON.parse(response.payload)
      expect(pick(payload,['id', 'name', 'userId'])).to.equal({id: lockId, name: TEST_LOCK_NAME, userId: userId})
     })
     it('should require authentication', itShouldRequireAuthentication(server,
-        request("GET", {}, 1)
+        request("GET", {credentials: undefined}, 1)
     ))  
   })
   describe('GET /locks/macid/:macid', ()=>{
@@ -163,66 +165,45 @@ describe('API Locks', function() {
       const response = await server.inject(
           request("GET", {}, 'macid/'+macId)
       )
-     expect(response.result.statusCode).to.equal(200)
+     expect(response.statusCode).to.equal(200)
      const payload = JSON.parse(response.payload)
-     expect(pick(payload,['id', 'name', 'userId', 'macId'])).to.equal({id: lockId, name: TEST_LOCK_NAME, userId: userId, macId: macId})
+     expect(pick(payload,['id', 'name', 'userId', 'macId'])).to.equal({id: lock.id, name: TEST_LOCK_NAME, userId: userId, macId: macId})
     })
     it('should require authentication', itShouldRequireAuthentication(server,
-        request("GET", {}, 'macid/'+uuidv4())
+        request("GET", {credentials: undefined}, 'macid/'+uuidv4())
     ))  
   })
-
   describe('PATCH /locks/:id',()=>{
-    it('should be able to update lock name if it belongs to authenticated user', async()=>{
-      const userId = CREDENTIALS.id
-      const lock = await Lock.create({name:TEST_LOCK_NAME, userId:userId})
-      let lockId = lock.get('id')
-      let response = await server.inject(
-          request("GET", {}, lockId)
-      )
-     expect(response.result.statusCode).to.equal(200)
-     const payload = JSON.parse(response.payload)
-     expect(pick(payload,['id', 'name', 'userId'])).to.equal({id: lockId, name: TEST_LOCK_NAME, userId: userId})
-     const patchedName="patched name"
-     response = await server.inject(
-          request("PATCH", {
-            payload:{
-              name:patchedName
+      it('should be able to update lock name if it belongs to authenticated user', async()=>{
+        const userId = CREDENTIALS.id
+        const lock = await Lock.create({name:TEST_LOCK_NAME, userId:userId})
+        let lockId = lock.get('id')
+        let response = await server.inject(
+            request("GET", {}, lockId)
+        )
+       expect(response.statusCode).to.equal(200)
+       let payload = JSON.parse(response.payload)
+       expect(pick(payload,['id', 'name', 'userId'])).to.equal({id: lockId, name: TEST_LOCK_NAME, userId: userId})
+       const patchedName="patched name"
+       response = await server.inject(
+            request("PATCH", {
+              options:{
+                payload:{
+                name:patchedName
+                }
             }
-          }, lockId)
-     )
-     expect(response.result.statusCode).to.equal(200)
-     response = await server.inject(
-          request("GET", {}, lockId)
-     )
-     payload = JSON.parse(response.payload)
-     expect(pick(payload,['id', 'name', 'userId'])).to.equal({id: lockId, name: patchedName, userId: userId})
-    })
-    it("should not allow patching fields other than name", async()=>{
-      const userId = CREDENTIALS.id + 1
-      const lock = await Lock.create({name:TEST_LOCK_NAME, userId:userId})
-      let lockId = lock.get('id')
-      let response = await server.inject(
-          request("GET", {}, lockId)
-      )
-     expect(response.result.statusCode).to.equal(200)
-     const patchedName="patched name"
-     response = await server.inject(
-          request("PATCH", {
-            payload:{
-              name:patchedName
-            }
-          }, lockId)
-     )
-     expect(response.result.statusCode).to.equal(403)
-     response = await server.inject(
-          request("GET", {}, lockId)
-     )
-     payload = JSON.parse(response.payload)
-     expect(pick(payload,['id', 'name', 'userId'])).to.equal({id: lockId, name: TEST_LOCK_NAME, userId: userId})
-    })
+            }, lockId)
+       )
+       expect(response.statusCode).to.equal(200)
+       response = await server.inject(
+            request("GET", {}, lockId)
+       )
+       payload = JSON.parse(response.payload)
+       expect(pick(payload,['id', 'name', 'userId'])).to.equal({id: lockId, name: patchedName, userId: userId})
+     })  
     it('should require authentication', itShouldRequireAuthentication(server,
         request("PATCH", {
+          credentials: undefined,
           payload:{
             name:"patched name"
           }

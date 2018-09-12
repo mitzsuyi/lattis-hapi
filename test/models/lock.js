@@ -15,7 +15,6 @@ afterEach(async ()=>{
     await testDb.clean()
 })
 
-
 describe('Lock model', function() {
   it("can be created", async ()=>{
     let count = await Lock.count()

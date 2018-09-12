@@ -28,6 +28,9 @@ const locks = Joi.object({
 
 
 const STATUSES = {
+    204: {
+       description: "No Content" 
+    },
     401: {
         description: 'Unauthorized'
     },
@@ -85,7 +88,7 @@ const updateUserHttpStatus = statusWithCodes(['200u', 401, 403, 409]);
 const userHttpStatus = statusWithCodes(['200u', 401, 403]);
 const usersHttpStatus = statusWithCodes(['200ui', 401, 403]);
 
-const defaultHttpStatus = statusWithCodes([200, 401, 403])
+const defaultHttpStatus = statusWithCodes([204, 401, 403])
 
 module.exports = {
     loginHttpStatus: loginHttpStatus,
