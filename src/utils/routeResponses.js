@@ -12,9 +12,10 @@ const lock = Joi.object({
 
 const user = Joi.object({
     id: ID,
+    password: Joi.string(),
     username: Joi.string(),
-    birthDate: Joi.date(),
-    name: Joi.string(),
+    birthDate: Joi.date().optional(),
+    name: Joi.string().optional(),
 }).label('User')
 
 const users = Joi.object({

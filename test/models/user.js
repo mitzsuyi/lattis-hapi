@@ -107,9 +107,7 @@ describe('User model', ()=> {
     const patch = user.patch({name:1, birthDate:"birthDate"})
     await expect(patch).to.reject(Error)
   })
-   it("can insert new record via put when there is no conflict", async ()=>{
-    let count = await User.count()
-    expect(count).to.equal(0)
+   it("raises error on put when id does not exist", async ()=>{
     const user = await User.create({username:"username", password:"password"})
     count = await User.count()
     expect(count).to.equal(1)
@@ -117,16 +115,8 @@ describe('User model', ()=> {
     const patchedName="patched name"
     const cloned = user.clone()
     cloned.set({id:user.id+1, username:"username2", name: patchedName, birthDate: birthDate})
-    const updated = await User.put(user, cloned)
-    count = await User.count()
-    expect(count).to.equal(2)
-    const newUser = await User.where({id:user.id+1}).fetch()
-    expect(newUser.get('name')).to.equal(patchedName)
-    expect(newUser.get('birthDate')).to.equal(birthDate)
-    const saved = User.where({id:user.id})
-    const savedNameBirthDate = saved.pick(["name", "birthDate"])
-    expect(savedNameBirthDate).to.equal({})
-    expect(savedNameBirthDate).to.equal(user.pick(["name", "birthDate"]))
+    const updated = User.put(user, cloned)
+    await expect(updated).to.reject(Error)
   })
 
   it("resists updates to all fields other than name/birthDate", async ()=>{
@@ -158,6 +148,5 @@ describe('User model', ()=> {
     const result = await bcrypt.compare(password, createPassword)
     expect(result).to.equal(true)
   })
-  
 
 });

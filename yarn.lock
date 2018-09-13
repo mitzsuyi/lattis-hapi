@@ -216,10 +216,6 @@ big-time@2.x.x:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/big-time/-/big-time-2.0.1.tgz#68c7df8dc30f97e953f25a67a76ac9713c16c9de"
 
-bluebird@^2.9.13:
-  version "2.11.0"
-  resolved "http://registry.npmjs.org/bluebird/-/bluebird-2.11.0.tgz#534b9033c022c9579c56ba3b3e5a5caafbb650e1"
-
 bluebird@^3.3.5, bluebird@^3.4.3, bluebird@^3.5.1:
   version "3.5.2"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.2.tgz#1be0908e054a751754549c270489c1505d4ab15a"
@@ -1575,13 +1571,6 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.2.tgz#01146b36a6218e64e58f3a8d66de5d7fc6f6d051"
 
-knex-cleaner@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/knex-cleaner/-/knex-cleaner-1.1.4.tgz#588b18c6cd20815216fa2c8f598800d2face7d90"
-  dependencies:
-    bluebird "^2.9.13"
-    lodash "^3.5.0"
-
 knex@^0.15.2:
   version "0.15.2"
   resolved "https://registry.yarnpkg.com/knex/-/knex-0.15.2.tgz#6059b87489605f4cc87599a6d2a9d265709e9340"
@@ -1684,10 +1673,6 @@ lodash.once@^4.0.0:
 lodash.pick@^4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/lodash.pick/-/lodash.pick-4.4.0.tgz#52f05610fff9ded422611441ed1fc123a03001b3"
-
-lodash@^3.5.0:
-  version "3.10.1"
-  resolved "http://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
 lodash@^4.11.1, lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0:
   version "4.17.10"

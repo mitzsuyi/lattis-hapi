@@ -1,17 +1,22 @@
+'use strict'
+
 const { expect } = require('code');
 const Lab = require('lab');
 const {before, afterEach, beforeEach, describe, it } = exports.lab = Lab.script();
-const Lock = require('../../src/models/Lock')
+const Lock = require('../../src/models/lock')
 const {setup, server} = require('../../server');
 const itShouldRequireAuthentication = require('../helper').itShouldRequireAuthentication
 const pick = require('lodash.pick')
 const testDb = require('../setup').db
 const uuidv4 = require('uuid/v4');
 
+const CREDENTIALS={id:1}
+
+const request = require('../helper').routeRequest("/locks", CREDENTIALS)
+
 before(async ()=>{
     await testDb.migrate()
     await testDb.clean() 
-    await setup()
 })
 
 afterEach(async ()=>{
@@ -19,26 +24,6 @@ afterEach(async ()=>{
 })
 
 const TEST_LOCK_NAME="test lock"
-const CREDENTIALS={id:1}
-
-function request(method, opts={}, path=""){
-  const defaults={credentials:CREDENTIALS, options:{}}
-  const params = Object.assign({}, defaults, opts)
-  let _path = path
-  if(path){
-    _path = '/'+path
-  }
-  const request= Object.assign({},
-    {
-      method: method,
-      url: '/locks' + _path,
-      credentials: params.credentials
-    },
-    params.options 
-  )  
-  //console.log('request',request)
-  return request
-}
 
 describe('API Locks', function() {
   describe('POST /locks', ()=>{
@@ -66,6 +51,8 @@ describe('API Locks', function() {
       expect(response.statusCode).to.equal(422)
     })
     it('should create a lock ', async()=>{
+       let count = await Lock.count()
+       expect(count).to.equal(0)
        let response = await server.inject(
           request("POST", {
             options:{
@@ -76,6 +63,8 @@ describe('API Locks', function() {
           })
       )
       expect(response.statusCode).to.equal(200)
+      count = await Lock.count()
+      expect(count).to.equal(1)
     })
   })
   describe('DELETE /locks/:id', ()=>{

@@ -1,5 +1,9 @@
 const reject = (reason)=>{
-    return Promise.reject(new Error(reason))
+    let err = reason
+    if (!err.isBoom){
+        err = new Error(reason)
+    } 
+    return Promise.reject(err)
 }
 
 exports.reject = reject

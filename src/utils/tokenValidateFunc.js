@@ -2,7 +2,7 @@
 
 const validate = async function(decoded, request){
   return {
-    isValid: true
+    isValid: !!decoded.id
   }
 }
 

@@ -10,8 +10,8 @@ function route(path, method, description, notes, validation={}, opts={}){
     const validate = Object.assign({}, validation)
     const responses = opts.responses || []
     let pre = opts.pre || []
-    if(pre){
-
+    if(opts.pre){
+      pre = [pre]
     }
     const _notes = [notes]
     let handler = NOT_IMPLEMENTED
