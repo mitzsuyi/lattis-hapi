@@ -66,6 +66,9 @@ describe('API Locks', function() {
       count = await Lock.count()
       expect(count).to.equal(1)
     })
+   it('should require authentication', itShouldRequireAuthentication(server,
+        request("POST", {credentials: undefined, options:{payload: {name: TEST_LOCK_NAME}}})
+   ))  
   })
   describe('DELETE /locks/:id', ()=>{
     it('should delete lock if it belongs to authenticated user', async()=>{

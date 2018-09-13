@@ -6,6 +6,7 @@ const {before, afterEach, beforeEach, describe, it } = exports.lab = Lab.script(
 const {setup, server} = require('../../server');
 const testDb = require('../setup').db
 const pick = require('lodash.pick')
+const itShouldRequireAuthentication = require('../helper').itShouldRequireAuthentication
 
 const CREDENTIALS={id:1}
 
@@ -111,7 +112,10 @@ describe('API Users', () => {
       expect(response.statusCode).to.equal(204)
       count = await User.count()
       expect(count).to.equal(0) 
-    });    
+    }); 
+    it('should require authentication', itShouldRequireAuthentication(server,
+        request("DELETE", {credentials: undefined},"me")
+    ))  
   }) 
   describe("GET /users", () =>{
     it("should return [list] other users in the system", async()=>{
@@ -125,6 +129,9 @@ describe('API Users', () => {
       const users=payload(response)
       expect(pick(users[0], ['id', 'username'])).to.equal({id: user2.get('id'), username:username2})
     });
+    it('should require authentication', itShouldRequireAuthentication(server,
+        request("GET", {credentials: undefined})
+    ))   
   })
   describe("GET /users/:id", () =>{
     it("should return a user by id", async()=>{
@@ -137,8 +144,10 @@ describe('API Users', () => {
       expect(response.statusCode).to.equal(200)
       const user=payload(response)
       expect(pick(user, ['id', 'username'])).to.equal({id: user2.get('id'), username:username2})
-
     });
+    it('should require authentication', itShouldRequireAuthentication(server,
+        request("GET", {credentials: undefined},1)
+    ))  
   })
   describe("GET /users/username/:username", () =>{
     it("should return a user by username", async()=>{
@@ -152,6 +161,9 @@ describe('API Users', () => {
       const user=payload(response)
       expect(pick(user, ['id', 'username'])).to.equal({id: user2.get('id'), username:username2})
     });
+   it('should require authentication', itShouldRequireAuthentication(server,
+        request("GET", {credentials: undefined},"username")
+   ))   
   })
    describe("PUT /users/me", () =>{
     it("should be able to update current user name/birthdate", async()=>{
@@ -204,6 +216,9 @@ describe('API Users', () => {
       )
       expect(response.statusCode).to.equal(404)
     })
+    it('should require authentication', itShouldRequireAuthentication(server,
+        request("PUT", {credentials: undefined, options:{payload:User.forge().serialize()}})
+    ))    
   })
 
   describe("PATCH /users/me", () =>{
@@ -246,6 +261,9 @@ describe('API Users', () => {
       )
       expect(response.statusCode).to.equal(400)
     })
+   it('should require authentication', itShouldRequireAuthentication(server,
+        request("PATCH", {credentials: undefined, options:{payload:{name:"patched name"}}})
+    ))    
   })   
 
   describe("POST /login", () =>{
@@ -260,9 +278,22 @@ describe('API Users', () => {
           }})
       )
       expect(response.statusCode).to.equal(200)
-      expect(response.payload.access_token).to.exist()
+      const access_token = payload(response).access_token
+      expect(access_token).to.exist()
     })
     it("should indicate 401 if provided credentials are not correct", async()=>{
+      const  credentials = {username:TEST_USER_NAME, password:TEST_PASSWORD}
+      const me = await user_create(credentials)
+      const response = await server.inject(
+          request("POST",{
+            basePath: "/login",
+            options:{
+            payload:{username:TEST_USER_NAME,password:"bad password"}
+          }})
+      )
+      expect(response.statusCode).to.equal(401)
+    })
+    it("should indicate be able to access a restricted resource with token", async()=>{
       const  credentials = {username:TEST_USER_NAME, password:TEST_PASSWORD}
       const me = await user_create(credentials)
       const response = await server.inject(

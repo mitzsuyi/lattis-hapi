@@ -86,11 +86,11 @@ const getMe = async(request, reply)=>{
 
 const login = async(request, reply) =>{
    const {username, password} = request.payload 
-   const user = User.where({username: username}).fetch()
+   const user = await User.where({username: username}).fetch()
    if (!user){
     throw Boom.notFound("User not found")
    }
-   const isValid = await User.validate(user, password)
+   const isValid = await User.validatePassword(user, password)
    if (!isValid){
     throw Boom.unauthorized("Invalid credentials")
    }

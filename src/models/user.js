@@ -88,7 +88,7 @@ const User = DB.Model.extend({
     return bcrypt.hash(password, SALT_ROUNDS);
   }, 
   validatePassword: async (user, plaintext)=>{
-    const isValid = await bcrypt.compare(plaintext, user.password)
+    const isValid = await bcrypt.compare(plaintext, user.get('password'))
     return isValid
   },
   create: async ({username, password}) => {
