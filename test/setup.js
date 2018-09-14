@@ -1,5 +1,7 @@
 'use strict';
 
+require('dotenv').config()
+
 const dbConf = require('../knexfile.js').test
 const bookshelf = require('../src/models/db')
 

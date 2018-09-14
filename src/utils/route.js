@@ -28,6 +28,7 @@ function route(path, method, description, notes, validation={}, opts={}){
         config:{
             pre: [].concat(pre),
             tags:["api"],
+            auth: opts.insecured ? false : undefined, 
             description: description,
             notes: _notes,
             plugins: {

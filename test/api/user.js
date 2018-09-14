@@ -217,7 +217,7 @@ describe('API Users', () => {
       expect(response.statusCode).to.equal(404)
     })
     it('should require authentication', itShouldRequireAuthentication(server,
-        request("PUT", {credentials: undefined, options:{payload:User.forge().serialize()}})
+        request("PUT", {credentials: undefined, options:{payload:User.forge().serialize()}},"me")
     ))    
   })
 
@@ -262,7 +262,7 @@ describe('API Users', () => {
       expect(response.statusCode).to.equal(400)
     })
    it('should require authentication', itShouldRequireAuthentication(server,
-        request("PATCH", {credentials: undefined, options:{payload:{name:"patched name"}}})
+        request("PATCH", {credentials: undefined, options:{payload:{name:"patched name"}}},"me")
     ))    
   })   
 
@@ -293,17 +293,28 @@ describe('API Users', () => {
       )
       expect(response.statusCode).to.equal(401)
     })
-    it("should indicate be able to access a restricted resource with token", async()=>{
+     it("should be able to access a restricted resource with token", async()=>{
       const  credentials = {username:TEST_USER_NAME, password:TEST_PASSWORD}
       const me = await user_create(credentials)
-      const response = await server.inject(
+      let response = await server.inject(
+          request("GET",{credentials:undefined},"me")
+      )
+      expect(response.statusCode).to.equal(401)
+      response = await server.inject(
           request("POST",{
             basePath: "/login",
             options:{
-            payload:{username:TEST_USER_NAME,password:"bad password"}
+            payload:{username:TEST_USER_NAME,password:TEST_PASSWORD}
           }})
       )
-      expect(response.statusCode).to.equal(401)
+      const access_token = payload(response).access_token
+      response = await server.inject(
+          request("GET",{credentials:undefined,
+          options:{
+            headers:{"Authorization": access_token}
+          }},"me")
+      )
+      expect(response.statusCode).to.equal(200)
     })
   })  
 })
