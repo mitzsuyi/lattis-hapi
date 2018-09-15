@@ -19,6 +19,7 @@ const getLockWithAuth = async(request, cond)=>{
   return lock 
 }
 const patchLock = async(request, reply) => {
+   const lockId = request.params.id
    const lock = await getLockWithAuth(request, {id:lockId})
    const payload = request.payload
    const patched = await lock.patch(payload)
