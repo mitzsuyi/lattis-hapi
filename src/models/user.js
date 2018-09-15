@@ -38,6 +38,7 @@ const User = DB.Model.extend({
       })
     })
     this.on('fetched', this.hidePrivateFields)
+    this.on('saved', this.hidePrivateFields)
     this.on('fetched:collection', this.hidePrivateFieldsCollection)
     
    },
