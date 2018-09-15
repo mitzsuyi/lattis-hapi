@@ -10,7 +10,9 @@ Lattis Demo API With HapiJS
 
 ## Workflow
 
-Auto deployment and continuous integration via Travis CI enabled on both master and develop
+Auto deployment and continuous integration via 
+
+Travis CI (https://travis-ci.org/mitzsuyi/lattis-hapi) enabled on both master and develop
 
 Staging URL:( https://lattis-hapi-staging.herokuapp.com)
 
