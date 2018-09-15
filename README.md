@@ -12,7 +12,7 @@ Lattis Demo API With HapiJS
 
 1. git clone  https://github.com/mitzsuyi/lattis-hapi.git
 2. cd lattis-hapi
-3. yarn install (postinstall step creates migrates database)
+3. yarn install (postinstall step creates migrates database, assume db or tables do not exist, may fail otherwise)
 
 ## Configure
  
