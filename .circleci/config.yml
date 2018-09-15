@@ -35,8 +35,13 @@ jobs:
         
       # run tests!
       - run: yarn test
-deployment:
-  staging:
+deployment:  
+ production:
+    branch: master
+    heroku:
+      appname: lattis-hapi 
+ staging:
     branch: staging
     heroku:
-      appname: lattis-hapi-staging  
+      appname: lattis-hapi-staging 
+     
