@@ -5,7 +5,7 @@ require('dotenv').config()
 const Config = require('../config')
 
 const Hapi = require('hapi')  
-
+const Boom = require('boom')
 const server = new Hapi.Server({
     port: Config.PORT,
     routes: {
