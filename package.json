@@ -23,7 +23,7 @@
     "hapi-namespace": "^1.0.3",
     "hapi-swagger": "^9.1.1",
     "inert": "^5.1.0",
-    "knex": "^0.15.0",
+    "knex": "^0.15.2",
     "lodash.pick": "^4.4.0",
     "uuid": "^3.3.2",
     "vision": "^5.4.0"
