@@ -68,11 +68,8 @@ workflows:
     jobs:
        - deploy-dev:
            requires: 
-             - build       
-           filters: 
-              branches:
-                only: 
-                 - development                            
+             - build                  
+                                      
        - deploy-master:
             requires: 
               - build         
