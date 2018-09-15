@@ -8,6 +8,14 @@ Lattis Demo API With HapiJS
 3. HapiJS (lab/code) for testing (https://github.com/hapijs/lab,https://github.com/hapijs/code)
 4. Swagger API documentation (https://github.com/glennjones/hapi-swagger)
 
+## Workflow
+
+Auto deployment and continuous integration via Travis CI enabled on both master and develop
+
+Staging URL:( https://lattis-hapi-staging.herokuapp.com)
+
+Production URL: (https://lattis-hapi.herokuapp.com/)
+
 ## Setup
 
 1. git clone  https://github.com/mitzsuyi/lattis-hapi.git
@@ -45,6 +53,11 @@ yarn start
 ## API DOOCUMENTATION VIA SWAGGER
 
 http://[ROOT_URL]/domentation
+
+## NOTES
+
+1. locks can only be changed via patch
+2. PUT users only allows changes to name birthDate (accepts ISOString, e.g Date.prototype.toISOString())
 
 ## LICENSE
 
