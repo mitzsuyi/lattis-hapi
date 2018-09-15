@@ -1,11 +1,29 @@
 'use strict';
 
-const lab = exports.lab = require('lab').script();
-exports.expect = require('code').expect;
+require('dotenv').config()
 
-exports.describe = lab.describe;
-exports.before = lab.before;
-exports.after = lab.after;
-exports.beforeEach = lab.beforeEach;
-exports.afterEach = lab.afterEach;
-exports.it = lab.it;
+const dbConf = require('../knexfile.js').test
+const bookshelf = require('../src/models/db')
+
+const {setup} = require('../server');
+
+const migrate = async()=>{
+    await bookshelf.knex.migrate.rollback(dbConf)
+    await bookshelf.knex.migrate.latest(dbConf)
+}
+
+const clean = async(options={}) =>{
+   await bookshelf.knex('users').truncate()
+   await bookshelf.knex('locks').truncate()
+}
+
+(async()=>{
+  await setup()
+})()
+
+module.exports = {
+  db:{
+    migrate: migrate,
+    clean: clean
+  } 
+}

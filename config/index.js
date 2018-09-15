@@ -3,8 +3,14 @@
 function env(VAR){
   return process.env[VAR]
 }
-const NODE_ENV= env("NODE_ENV")
-const IS_DEV_ENV = NODE_ENV === 'development' || NODE_ENV === undefined
+const  DEVELOPMENT = "development"
+const NODE_ENV = env("NODE_ENV") || DEVELOPMENT
+const IS_DEV_ENV = NODE_ENV === DEVELOPMENT
 module.exports={
-    PORT: env("PORT")
+    PORT: env("PORT"),
+    ENV: NODE_ENV,
+    JWT_SECRET: env('JWT_SECRET'),
+    JWT_TOKEN_EXPIRY: env('JWT_TOKEN_EXPIRY'),
+    IS_DEV_ENV: IS_DEV_ENV,
+    MYSQL_DB_URL: env("MYSQL_DB_URL")
 }
