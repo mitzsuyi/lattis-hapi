@@ -34,7 +34,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
         
       # run tests!
-      - run-tests: yarn test
+      - run: yarn test
 deployment:  
  production:
     branch: master
@@ -48,6 +48,6 @@ workflows:
   version: 2
   lattis-workflow:
     jobs:
-      - run-tests:
+      - build:
           context: lattis-hapi-tests      
      
