@@ -78,6 +78,7 @@ const User = DB.Model.extend({
     const modifiedId = modified.get('id')
    if (existing.get('id') === modified.get('id')) {
      const attemptToOverwrite = READ_ONLY.some((prop)=>{
+       console.log(prop, existing.get(prop), modified.get(prop))
       return existing.get(prop) !== modified.get(prop)
      })
      if (attemptToOverwrite){
