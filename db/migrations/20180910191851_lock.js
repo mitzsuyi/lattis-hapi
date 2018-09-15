@@ -6,7 +6,7 @@ exports.up = function(knex, Promise) {
       table.uuid('macId').notNullable()
       table.string('name')
       table.integer("userId").notNullable()
-      table.foreign("userId").references('id').inTable('users')
+      table.foreign("userId").references('users.id')
       table.timestamps()
       table.unique(["name", "userId"])
       table.unique(["macId", "userId"])
