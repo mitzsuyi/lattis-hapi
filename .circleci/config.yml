@@ -67,15 +67,19 @@ workflows:
   lattis-workflow:
     jobs:
        - deploy-dev
-           filters:
-             branches:
-                only:
-                  - development
-      - deploy-master
-          filters:  # using regex filters requires the entire branch to match
-            branches:
-              only:  # only branches matching the below regex filters will run
-                master
+           requires:
+             - build
+           filters: 
+              branches:
+                only: development                    
+           
+       - deploy-master
+            requires:
+               - build
+            filters:  # using regex filters requires the entire branch to match
+              branches:
+                only: master
+              
       - build:
           context: lattis-hapi-tests      
      
