@@ -68,22 +68,18 @@ workflows:
     jobs:
        - deploy-dev:
            requires: 
-             - build
-        
+             - build       
            filters: 
               branches:
                 only: 
-                 - development                    
-           
+                 - development                            
        - deploy-master:
             requires: 
-              - build
-          
+              - build         
             filters:  # using regex filters requires the entire branch to match
               branches:
                 only: 
-                 - master
-              
-      - build:
-          context: lattis-hapi-tests      
+                  - master        
+       - build:
+           context: lattis-hapi-tests      
      
