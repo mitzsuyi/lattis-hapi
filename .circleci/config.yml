@@ -67,15 +67,15 @@ workflows:
   lattis-workflow:
     jobs:
        - deploy-dev
-           requires:
-             - build
+           requires: buil
+        
            filters: 
               branches:
                 only: development                    
            
        - deploy-master
-            requires:
-               - build
+            requires: build
+          
             filters:  # using regex filters requires the entire branch to match
               branches:
                 only: master
