@@ -44,4 +44,10 @@ deployment:
     branch: staging
     heroku:
       appname: lattis-hapi-staging 
+workflows:
+  version: 2
+  lattis-workflow:
+    jobs:
+      - run-tests:
+          context: test-lattis-hapi      
      
