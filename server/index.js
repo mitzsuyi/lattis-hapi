@@ -21,7 +21,8 @@ const server = new Hapi.Server({
           throw err;
         }
       }
-    }  
+    }
+    }
 })
 
 const Plugins = require('./plugins')
