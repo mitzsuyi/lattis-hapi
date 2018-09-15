@@ -8,7 +8,6 @@ const noContent = (reply)=> reply.response().code(204)
 const getLockWithAuth = async(request, cond)=>{
    const userId = request.auth.credentials.id
    const lock = await Lock.where(cond).fetch()
-   console.log('got lock',lock)
    if (!lock){
     throw Boom.notFound("Lock does not exist")
    } else {
