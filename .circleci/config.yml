@@ -4,11 +4,6 @@
 #
 version: 2
 jobs:
-  deployment:
-    staging:
-      branch: staging
-    heroku:
-      appname: lattis-hapi-staging
   build:
     docker:
       # specify the version you desire here
@@ -40,4 +35,8 @@ jobs:
         
       # run tests!
       - run: yarn test
-
+ deployment:
+  staging:
+    branch: staging
+    heroku:
+      appname: lattis-hapi-staging  
