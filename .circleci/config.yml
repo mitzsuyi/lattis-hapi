@@ -35,19 +35,44 @@ jobs:
         
       # run tests!
       - run: yarn test
-deployment:  
- production:
-    branch: master
-    heroku:
-      appname: lattis-hapi 
- staging:
-    branch: staging
-    heroku:
-      appname: lattis-hapi-staging 
+ deploy-master:
+    machine:
+        enabled: true
+    working_directory: ~/repo
+    environment:
+      HEROKU_APP: "lattis-hapi"
+    steps:
+      - checkout
+      - run:
+          name: Deploy Master to Heroku
+          command: |
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP.git  master   
+  deploy-dev:
+    machine:
+        enabled: true
+    working_directory: ~/repo
+    environment:
+      HEROKU_APP: "lattis-hapi"
+    steps:
+      - checkout
+      - run:
+          name: Deploy Development to Heroku
+          command: |
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP.git development
 workflows:
   version: 2
   lattis-workflow:
     jobs:
+       - deploy-dev
+           filters:
+             branches:
+                only:
+                  - development
+      - deploy-master
+          filters:  # using regex filters requires the entire branch to match
+            branches:
+              only:  # only branches matching the below regex filters will run
+                master
       - build:
           context: lattis-hapi-tests      
      
