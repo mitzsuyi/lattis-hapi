@@ -74,7 +74,7 @@ const verifyUsernameUnique = async (request, reply) =>{
   const userParams = {username:request.payload.username}
   const alreadyExists = await User.where(userParams).fetch()
   if (alreadyExists){
-     return reply.response('User name must be unique').code(422).takeover()
+     return reply.response('Username is taken').code(422).takeover()
   }
   return reply.continue
 }
