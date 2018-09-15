@@ -60,7 +60,7 @@ jobs:
       - run:
           name: Deploy Development to Heroku
           command: |
-            git push https://mitzsuyi:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP.git develop
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP.git develop
             
 workflows:
   version: 2
