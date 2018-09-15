@@ -41,7 +41,7 @@
   "scripts": {
     "start": "node server/index.js",
     "test": "lab --assert code  --leaks ",
-    "postinstall":"./node_modules/.bin/knex rollback ; ./node_modules/.bin/knex migrate:latest"
+    "postinstall":"./node_modules/.bin/knex migrate:rollback ; ./node_modules/.bin/knex migrate:latest"
   },
   "devDependencies": {
     "code": "^5.2.0",
