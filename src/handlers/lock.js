@@ -50,6 +50,7 @@ const createLock = async (request, reply) => {
 }
 
 const deleteLock = async(request, reply) => {
+   const lockId = request.params.id
    const lock = await getLockWithAuth(request, {id:lockId})
    await lock.destroy()
    return noContent(reply)
