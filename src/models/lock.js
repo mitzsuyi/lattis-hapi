@@ -36,12 +36,7 @@ const Lock = DB.Model.extend({
     model.unset('updated_at')
     model.unset('created_at')
   },  
- serialize: function() {
-   const result = DB.model.serialize.apply( arguments)
-   const userId = delete result.userId
-   result.user = userId
-   return result
- },
+
   validateSave: function() {
     const {error, _} = Joi.validate(this.attributes, schema)
     if (error) throw error
