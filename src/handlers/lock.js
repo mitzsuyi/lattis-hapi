@@ -5,10 +5,9 @@ const Lock = require("../models/lock")
 
 const noContent = (reply)=> reply.response().code(204)
 
-const getLockWithAuth = async(request)=>{
-   const lockId = request.params.id
+const getLockWithAuth = async(cond)=>{
    const userId = request.auth.credentials.id
-   const lock = await Lock.where({id: lockId}).fetch()
+   const lock = await Lock.where(cond).fetch()
    if (!lock){
     throw Boom.notFound("Lock does not exist")
    } else {
@@ -19,7 +18,7 @@ const getLockWithAuth = async(request)=>{
   return lock 
 }
 const patchLock = async(request, reply) => {
-   const lock = await getLockWithAuth(request)
+   const lock = await getLockWithAuth({id:lockId})
    const payload = request.payload
    const patched = await lock.patch(payload)
    return  patched
@@ -31,20 +30,17 @@ const getLocks = async(request, reply) => {
    return locks
 }
 
-const getLock = async(request, reply) => {
-   const userId = request.auth.credentials.id 
+const getLock = async(request, reply) =>  { 
    const lockId = request.params.id
-   const lock = await Lock.where({id: lockId, userId: userId}).fetch()
+   const lock = await getLockWithAuth({id:lockId})   
    return lock
 }
 
-const getLockByMacId = async(request, reply) => {
-   const userId = request.auth.credentials.id 
+const getLockByMacId = async(request, reply) =>  {  
    const macId = request.params.macId
-   const lock = await Lock.where({macId: macId, userId: userId}).fetch()
+   const lock = await getLockWithAuth({macId:macId})
    return lock
 }
-
 
 const createLock = async (request, reply) => {
    const lock = await Lock.create({name:request.payload.name, userId:request.auth.credentials.id})
@@ -52,7 +48,7 @@ const createLock = async (request, reply) => {
 }
 
 const deleteLock = async(request, reply) => {
-   const lock = await getLockWithAuth(request)
+   const lock = await getLockWithAuth({id:lockId})
    await lock.destroy()
    return noContent(reply)
 }
