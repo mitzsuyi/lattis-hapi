@@ -38,8 +38,17 @@ const User = DB.Model.extend({
       })
     })
     this.on('fetched', this.hidePrivateFields)
+    this.on('saved', this.hidePrivateFields)
+    this.on('fetched:collection', this.hidePrivateFieldsCollection)
+    
    },
 
+  hidePrivateFieldsCollection: function(collection){
+    collection.forEach((model)=>{
+      this.hidePrivateFields(model)
+    })     
+  },  
+  
   hidePrivateFields: function(model){
     model.unset('updated_at')
     model.unset('created_at')
@@ -69,7 +78,7 @@ const User = DB.Model.extend({
     const existingId = existing.get('id')
     const modifiedId = modified.get('id')
    if (existing.get('id') === modified.get('id')) {
-     const attemptToOverwrite = READ_ONLY.some((prop)=>{
+     const attemptToOverwrite = READ_ONLY.some((prop)=>{   
       return existing.get(prop) !== modified.get(prop)
      })
      if (attemptToOverwrite){

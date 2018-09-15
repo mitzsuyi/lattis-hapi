@@ -20,9 +20,17 @@ const Lock = DB.Model.extend({
   tableName: 'locks',
   initialize: function() {
     this.constructor.__super__.initialize.apply(this, arguments);
-    this.on('saving', this.validateSave);
+    this.on('saving', this.validateSave)    
     this.on('fetched', this.hidePrivateFields)
-  },
+    this.on('saved', this.hidePrivateFields)
+    this.on('fetched:collection', this.hidePrivateFieldsCollection)
+   },
+
+  hidePrivateFieldsCollection: function(collection){
+    collection.forEach((model)=>{
+      this.hidePrivateFields(model)
+    })     
+  },  
 
   hidePrivateFields: function(model){
     model.unset('updated_at')
