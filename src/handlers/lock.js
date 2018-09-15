@@ -61,7 +61,7 @@ const verifyNameUserIdUnique = async (request, reply) =>{
   const lockParams = {name:request.payload.name, userId:request.auth.credentials.id}
   const alreadyExists = await Lock.where(lockParams).fetch()
   if (alreadyExists){
-     return reply.response('Lock name must be unique').code(422).takeover()
+     return reply.response('Lock name is taken ').code(422).takeover()
   }
   return reply.continue
 }
