@@ -49,5 +49,5 @@ workflows:
   lattis-workflow:
     jobs:
       - run-tests:
-          context: test-lattis-hapi      
+          context: lattis-hapi-tests      
      
