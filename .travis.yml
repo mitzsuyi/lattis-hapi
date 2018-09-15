@@ -5,6 +5,6 @@ deploy:
   provider: heroku
   api_key: d2608392-edea-42fe-8e38-f649be6f869c
   app:
-    staging: lattis-hapi-staging
+    staging: lattis-hapi
     develop: lattis-hapi-staging
     master: lattis-hapi
