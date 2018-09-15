@@ -2,3 +2,4 @@ language: node_js
 deploy:
   provider: heroku
   api_key: d2608392-edea-42fe-8e38-f649be6f869c
+  app: lattis-hapi-staging
