@@ -67,6 +67,7 @@ workflows:
   lattis-workflow:
     jobs:
        - deploy-dev:
+           context: lattis-hapi-deploy
            requires: 
              - build                  
            filters:
@@ -74,6 +75,7 @@ workflows:
                only: staging
                  
        - deploy-master:
+            context: lattis-hapi-deploy
             requires: 
               - build         
             filters:  # using regex filters requires the entire branch to match
