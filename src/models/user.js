@@ -38,8 +38,16 @@ const User = DB.Model.extend({
       })
     })
     this.on('fetched', this.hidePrivateFields)
+    this.on('fetched:collection', this.hidePrivateFieldsCollection)
+    
    },
 
+  hidePrivateFieldsCollection: function(collection){
+    collection.forEach((model)=>{
+      this.hidePrivateFields(model)
+    })     
+  },  
+  
   hidePrivateFields: function(model){
     model.unset('updated_at')
     model.unset('created_at')
