@@ -23,7 +23,7 @@ module.exports = {
     useNullAsDefault: true
   },
   production: {
-    client: 'mysql',
+    client: 'mysql2',
     connection: Config.MYSQL_DB_URL, 
     migrations: {
       directory: migrationsDirectory,
