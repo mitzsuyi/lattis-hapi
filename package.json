@@ -26,8 +26,8 @@
     "knex": "^0.15.2",
     "lodash.pick": "^4.4.0",
     "uuid": "^3.3.2",
-    "vision": "^5.4.0",
-    "mysql2": "1.6.1"
+    "vision": "^5.4.0"
+
   },
   "husky": {
     "hooks": {
