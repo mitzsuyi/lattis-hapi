@@ -5,7 +5,7 @@ const Lock = require("../models/lock")
 
 const noContent = (reply)=> reply.response().code(204)
 
-const getLockWithAuth = async(cond)=>{
+const getLockWithAuth = async(request, cond)=>{
    const userId = request.auth.credentials.id
    const lock = await Lock.where(cond).fetch()
    console.log('got lock',lock)
@@ -19,7 +19,7 @@ const getLockWithAuth = async(cond)=>{
   return lock 
 }
 const patchLock = async(request, reply) => {
-   const lock = await getLockWithAuth({id:lockId})
+   const lock = await getLockWithAuth(request, {id:lockId})
    const payload = request.payload
    const patched = await lock.patch(payload)
    return  patched
@@ -33,13 +33,13 @@ const getLocks = async(request, reply) => {
 
 const getLock = async(request, reply) =>  { 
    const lockId = request.params.id
-   const lock = await getLockWithAuth({id:lockId})   
+   const lock = await getLockWithAuth(request, {id:lockId})   
    return lock
 }
 
 const getLockByMacId = async(request, reply) =>  {  
    const macId = request.params.macId
-   const lock = await getLockWithAuth({macId:macId})
+   const lock = await getLockWithAuth(request, {macId:macId})
    return lock
 }
 
@@ -49,7 +49,7 @@ const createLock = async (request, reply) => {
 }
 
 const deleteLock = async(request, reply) => {
-   const lock = await getLockWithAuth({id:lockId})
+   const lock = await getLockWithAuth(request, {id:lockId})
    await lock.destroy()
    return noContent(reply)
 }
