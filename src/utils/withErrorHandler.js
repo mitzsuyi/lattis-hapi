@@ -7,7 +7,7 @@ const withErrorHandler = async (request, reply, handler)=>{
     const result = await handler(request, reply)
     return result
   } catch(err){
-    console.log(err)
+
     if(err.isBoom) return err
     return boom.boomify(err)
   }
