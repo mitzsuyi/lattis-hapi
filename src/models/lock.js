@@ -36,8 +36,8 @@ const Lock = DB.Model.extend({
     model.unset('updated_at')
     model.unset('created_at')
   },  
- serialize: function(*args){
-   const result = DB.model.serialize.apply( args)
+ serialize: function() {
+   const result = DB.model.serialize.apply( arguments)
    const userId = delete result.userId
    result.user = userId
    return result
